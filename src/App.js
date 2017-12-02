@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import Country from './components/country.js';
+import CityPicker from './components/citypicker.js';
 class App extends Component {
   render() {
     return (
@@ -9,7 +9,7 @@ class App extends Component {
           <h1 className="App-title">Welcome to HNCity</h1>
         </header>
         <p className="App-intro">Welcome, we will do things here</p>
-	    <Country/>
+	    <CityPicker/>
       </div>
     );
   }
