@@ -18,6 +18,8 @@ var CityPicker = createClass({
 	render () {
 		var options = DATA.CITIES;
 		return (
+			<div>
+			<h4>Pick your city</h4>
 			<div className="section">
 				<VirtualizedSelect ref="citySelect"
 					options={options}
@@ -30,6 +32,7 @@ var CityPicker = createClass({
 					labelKey="name"
 					valueKey="name"
 				/>
+			</div>
 			</div>
 		);
 	}
