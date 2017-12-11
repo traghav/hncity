@@ -19,8 +19,9 @@ class Details extends Component {
 	}
 
 	handleSubmit(event) {
-		alert('A name was submitted: ' + this.state.mail);
-		console.log(this.state)
+		//alert('A name was submitted: ' + this.state.mail);
+		console.log(this.state);
+		this.props.changeEmail(this.state.mail);
 		event.preventDefault();
 			}
 	render() {
