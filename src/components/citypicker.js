@@ -10,10 +10,14 @@ var CityPicker = createClass({
 		return {};
 	},
 	updateValue (newValue) {
-		console.log(newValue);
+
+
 		this.setState({
 			selectValue: newValue
 		});
+		this.props.changeCity(newValue);
+		this.props.changeCityDetail(newValue);
+
 	},
 	render () {
 		var options = DATA.CITIES;

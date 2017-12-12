@@ -57,6 +57,14 @@ class Chat extends Component {
 			speed:text
 		});
 	}
+	listUsers(){
+		const rootRef =  firebase.database().ref().child('user');
+		const cityRef = rootRef.child(this.props.city);
+		//var p=cityRef.get();
+		console.log(cityRef);
+
+
+	}
 	
 
 	handleSubmit(event) {
@@ -67,11 +75,12 @@ class Chat extends Component {
 		this.refs['chatbox'].value="";
 		cityRef.push({
 			message:text,
-			sender:this.props.email
+			sender:this.props.email,
+			timestamp:(new Date()).getTime()
 		});
 			}
 	render() {
-		console.log(this.state)
+		this.listUsers();
 		return ( <div>
 				<ChatFeed
 			      messages={this.state.messages} // Boolean: list of message objects
@@ -94,7 +103,7 @@ class Chat extends Component {
 		    />
 				<form onSubmit={this.handleSubmit}>
 					<input ref="chatbox"/>
-					<input  type="submit" value="Sign me up" />
+					<input  type="submit" value="📨" />
 				</form>
 		
 				</div>

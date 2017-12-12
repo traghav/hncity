@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
+import * as firebase from 'firebase';
+import CityPicker from './citypicker.js';
 
 
 class Details extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {role: 'participant',
-					  mail: ''
+					  mail: '',
+					  city:''
 		};
 		this.handleChange = this.handleChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
@@ -15,19 +18,51 @@ class Details extends Component {
 		}
 	handleRoleChange(roleSelected) {
 		this.setState({role: roleSelected});
-		console.log(roleSelected);
+	}
+	handleCityChange(city){
+		this.setState({city:city});
+
+	}
+
+
+	isEmailAddress(str) {
+	   var pattern =/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,8})+$/;
+	   return pattern.test(str);  // returns a boolean 
+	}
+
+
+	uploadUser(){
+		const rootRef =  firebase.database().ref().child('user');
+		const cityRef = rootRef.child(this.state.city);
+		cityRef.push({
+			city:this.state.city,
+			email:this.state.mail,
+			role:this.state.role,
+			timestamp:(new Date()).getTime()
+		});
+
+
 	}
 
 	handleSubmit(event) {
-		//alert('A name was submitted: ' + this.state.mail);
-		console.log(this.state);
-		this.props.changeEmail(this.state.mail);
+		//
+
+		if(this.isEmailAddress(this.state.mail)===true) {
+			this.props.changeEmail(this.state.mail);
+			this.props.changeRole(this.state.role);
+			this.uploadUser();	
+		}
+		else
+			alert('An invalid email was submitted.');
+		
 		event.preventDefault();
 			}
 	render() {
+
 		return (
 			<form onSubmit={this.handleSubmit}>
-				<h4>Mail for reactjs</h4>
+				<CityPicker changeCity={this.props.changeCity} changeCityDetail={this.handleCityChange.bind(this)}  />
+				<h4>Your email please!</h4>
 				
 				  <input type="text" value={this.state.mail} onChange={this.handleChange} />
 				<br/><br/>
