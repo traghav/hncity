@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import * as firebase from 'firebase';
 import { ChatFeed, Message } from 'react-chat-ui';
+import {CSVLink, CSVDownload} from 'react-csv';
 var config = {
 apiKey: "AIzaSyBzsVcfwFAg1OHOMpo-d-P8aK5nWFMaUHc",
 authDomain: "hncity-2d41c.firebaseapp.com",
@@ -19,7 +20,8 @@ class Chat extends Component {
 		this.state = {
 		  messages : [
 		  ],
-		  is_typing: false
+		  is_typing: false,
+		  users:[[]]
 		  //...
 		};
 		this.handleChange = this.handleChange.bind(this);
@@ -47,6 +49,7 @@ class Chat extends Component {
 		 	});
 		 	
 		});
+		this.listUsers();
 		
 	}	
 	handleChange(event) {
@@ -60,10 +63,41 @@ class Chat extends Component {
 	listUsers(){
 		const rootRef =  firebase.database().ref().child('user');
 		const cityRef = rootRef.child(this.props.city);
-		//var p=cityRef.get();
-		console.log(cityRef);
+		const p=[];
+		cityRef.once('value', snap => {
+			
+			
+			var organizer=[];
+			var participant=[];
+			for(var key in snap.val()){
+				var row=[];
+				if(organizer.includes(snap.val()[key].email)===false&&snap.val()[key].role==='organizer') {
+					organizer.push(snap.val()[key].email);
+					row={}
+					row['E-mail']=(snap.val()[key].email);
+					row['Role']=(snap.val()[key].role);
+					row['Signed up on']=(snap.val()[key].timestamp);
+					p.push(row);
+						
+				}
+				if(organizer.includes(snap.val()[key].email)===false&&snap.val()[key].role==='participant') {
+					organizer.push(snap.val()[key].email);
+					row={}
+					row['E-mail']=(snap.val()[key].email);
+					row['Role']=(snap.val()[key].role);
+					row['Signed up on']=(snap.val()[key].timestamp);
+					p.push(row);
+						
+				} 
+			}
+			this.setState({
+				users:p
+			});
 
 
+		});
+		console.log(p.toString());
+		
 	}
 	
 
@@ -80,8 +114,35 @@ class Chat extends Component {
 		});
 			}
 	render() {
-		this.listUsers();
-		return ( <div>
+			
+		return ( 
+			<div>
+			<section id="two" class="spotlights">
+				<section>
+					<a href="generic.html" class="image">
+						<img src="images/pic08.jpg" alt="" data-position="center center" />
+					</a>
+					<div class="content">
+						<div class="inner">
+							<header class="major">
+								<h3>Orci maecenas</h3>
+							</header>
+							<p>Nullam et orci eu lorem consequat tincidunt vivamus et sagittis magna sed nunc rhoncus condimentum sem. In efficitur ligula tate urna. Maecenas massa sed magna lacinia magna pellentesque lorem ipsum dolor. Nullam et orci eu lorem consequat tincidunt. Vivamus et sagittis tempus.</p>
+							<ul class="actions">
+								<li><a href="generic.html" class="button">Learn more</a></li>
+							</ul>
+						</div>
+					</div>
+				</section>
+			</section>
+
+				<CSVLink data={this.state.users}
+				  filename={"my-file.csv"}
+				  className="btn btn-primary"
+				  target="_blank">
+				    Download me
+				</CSVLink>
+				
 				<ChatFeed
 			      messages={this.state.messages} // Boolean: list of message objects
 			      isTyping={this.state.is_typing} // Boolean: is the recipient typing

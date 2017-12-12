@@ -38,7 +38,7 @@ class Details extends Component {
 			city:this.state.city,
 			email:this.state.mail,
 			role:this.state.role,
-			timestamp:(new Date()).getTime()
+			timestamp:(new Date()).toString()
 		});
 
 
@@ -60,19 +60,31 @@ class Details extends Component {
 	render() {
 
 		return (
-			<form onSubmit={this.handleSubmit}>
+			<div id="wrapper">
+			<div id="main">
+			<section id="two">
+			<div class="main">
+
+							<section id="two" class="tiles">
+								<article>
+									<span class="image">
+										<img src="images/pic03.jpg" alt="" />
+									</span>
+									<header class="major">
+										<h3><a href="landing.html" class="link">Magna</a></h3>
+										<form onSubmit={this.handleSubmit}>
 				<CityPicker changeCity={this.props.changeCity} changeCityDetail={this.handleCityChange.bind(this)}  />
 				<h4>Your email please!</h4>
 				
 				  <input type="text" value={this.state.mail} onChange={this.handleChange} />
 				<br/><br/>
-				 <div className="radio">
+				 <div className="radio" >
                 <label>
                   <input type="radio" value="participant" checked={this.state.role === 'participant'} onChange={(e) => this.handleRoleChange('participant')} />
                   I just want to attend 
                 </label>
               </div>
-              <div className="radio">
+              <div className="radio" id="demo-priority-low">
                 <label>
                   <input type="radio" value="organizer" checked={this.state.role === 'organizer'} onChange={(e) => this.handleRoleChange('organizer')} />
                   I want to help organize an event!
@@ -80,7 +92,29 @@ class Details extends Component {
               </div>
               				<input type="submit" value="Sign me up" />
 			</form>
+									</header>
+								</article>
+								<article>
+									<span class="image">
+										<img src="images/pic04.jpg" alt="" />
+									</span>
+									<header class="major">
+										<h3><a href="landing.html" class="link">Ipsum</a></h3>
+										<p>Nisl sed aliquam</p>
+									</header>
+								</article>
+								
+							</section>
+			<p>What do you think about tom hanks</p>
+			
+			</div>
+			</section>
+			</div>
+			
+			</div>
 				);
+
+
 			}
 }
 
