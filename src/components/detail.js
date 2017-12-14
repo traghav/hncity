@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
 import * as firebase from 'firebase';
 import CityPicker from './citypicker.js';
-
+import '../main.css';
 
 class Details extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {role: 'participant',
 					  mail: '',
-					  city:''
+					  city:'',
+					  orgNumbers:0
 		};
 		this.handleChange = this.handleChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
@@ -23,9 +24,11 @@ class Details extends Component {
 		this.setState({city:city});
 
 	}
+	
 
 
 	isEmailAddress(str) {
+	   // eslint-disable-next-line
 	   var pattern =/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,8})+$/;
 	   return pattern.test(str);  // returns a boolean 
 	}
@@ -40,7 +43,27 @@ class Details extends Component {
 			role:this.state.role,
 			timestamp:(new Date()).toString()
 		});
-
+	}
+	findOrganizerNumbers(){
+		if(this.state.city!==''){
+			const rootRef =  firebase.database().ref().child('user');
+			const cityRef = rootRef.child(this.state.city);
+			cityRef.once('value', snap => {
+			
+			var organizer=[];
+			for(var key in snap.val()){
+				if(organizer.includes(snap.val()[key].email)===false&&snap.val()[key].role==='organizer') {
+					organizer.push(snap.val()[key].email);	
+				}
+			}
+			if(this.state.orgNumbers!==organizer.length){
+				this.setState({
+					orgNumbers:organizer.length
+				});	
+			}
+			});	
+		}
+		
 
 	}
 
@@ -58,9 +81,8 @@ class Details extends Component {
 		event.preventDefault();
 			}
 	render() {
-
+		this.findOrganizerNumbers();
 		return (
-			<div id="wrapper">
 			<div id="main">
 			<section id="two">
 			<div class="main">
@@ -71,12 +93,12 @@ class Details extends Component {
 										<img src="images/pic03.jpg" alt="" />
 									</span>
 									<header class="major">
-										<h3><a href="landing.html" class="link">Magna</a></h3>
+										<h3>Hacker News City</h3>
 										<form onSubmit={this.handleSubmit}>
 				<CityPicker changeCity={this.props.changeCity} changeCityDetail={this.handleCityChange.bind(this)}  />
 				<h4>Your email please!</h4>
 				
-				  <input type="text" value={this.state.mail} onChange={this.handleChange} />
+				  <input type="email" value={this.state.mail} onChange={this.handleChange} />
 				<br/><br/>
 				 <div className="radio" >
                 <label>
@@ -89,29 +111,29 @@ class Details extends Component {
                   <input type="radio" value="organizer" checked={this.state.role === 'organizer'} onChange={(e) => this.handleRoleChange('organizer')} />
                   I want to help organize an event!
                 </label>
+                <h4 hidden={this.state.role !== 'organizer'}>{this.state.orgNumbers} organizer(s) have already signed up.</h4>
               </div>
               				<input type="submit" value="Sign me up" />
 			</form>
 									</header>
 								</article>
 								<article>
-									<span class="image">
-										<img src="images/pic04.jpg" alt="" />
-									</span>
-									<header class="major">
-										<h3><a href="landing.html" class="link">Ipsum</a></h3>
-										<p>Nisl sed aliquam</p>
-									</header>
+									
+									
+										<h2>Meet up with your fellow Hacker News readers in your city!</h2>
+
+										
+									
 								</article>
 								
 							</section>
-			<p>What do you think about tom hanks</p>
+			
 			
 			</div>
 			</section>
 			</div>
 			
-			</div>
+			
 				);
 
 

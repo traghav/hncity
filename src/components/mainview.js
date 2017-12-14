@@ -39,7 +39,17 @@ class MainView extends Component {
     }
     else {
       return(
-        <h1>Thank you for your interest. If something is organized, the organizers will get in touch with you.</h1>
+      <div id="main">
+        <section id="one">
+          <div class="inner">
+            <header class="major">
+              <h1>Thank you!</h1>
+            </header>
+            <h2 id="content">Thank you for your interest. If something is organized, the organizers will get in touch with you.</h2>
+          </div>
+        </section>
+      </div>
+
         );
     }
     
